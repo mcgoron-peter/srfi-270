@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+SPDX-FileCopyrightText: 2026 Peter McGoron
+SPDX-License-Identifier: MIT
+-->
+  <head>
+    <meta charset="utf-8" />
+    <title>SRFI ###: Hexadecimal Floating-Point Constants</title>
+    <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
+    <style>
+            @media (prefers-color-scheme: light) {
+              :root {
+                --background-color: white;
+                --link-color: blue;
+                --text-color: black;
+                --visited-link-color: purple;
+              }
+              code {
+                  background-color: #dedede;
+              }
+            }
+
+            @media (prefers-color-scheme: dark) {
+              :root {
+                --background-color: #161616;
+                --link-color: SkyBlue;
+                --text-color: #e0e0e0;
+                --visited-link-color: Orchid;
+              }
+              code {
+                background-color: #484848;
+              }
+            }
+            a {
+              color: var(--link-color);
+            }
+            a:visited {
+              color: var(--visited-link-color);
+            }
+            body {
+              background-color: var(--background-color);
+              color: var(--text-color);
+            }
+            pre code {
+                background-color: transparent;
+            }
+            pre {
+                font-size: 12pt;
+            }
+            .centered {
+             display: flex;
+             justify-content: center;
+
+            }
+            td {
+              text-align: center;
+              padding-right: 12px;
+              padding-left: 12px;
+            }
+.productionset {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+
+}
+
+.productionset dt {
+  grid-column: 1;
+}
+
+.productionset dd {
+  grid-column: 2;
+  margin: 0;
+}
+
+
+    </style>
+    <link rel="stylesheet" href="https://srfi.schemers.org/srfi.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <body>
+    <h1><a href="https://srfi.schemers.org/"
+><img class="srfi-logo" src="https://srfi.schemers.org/srfi-logo.svg" alt="SRFI surfboard logo"
+/></a>###: Hexadecimal Floating-Point Constants</h1>
+
+<p>by Peter McGoron</p>
+
+<h2 id="status">Status</h2>
+
+<p style="color: red;">For editor's use only.  Please do not edit this section.</p>
+
+<p>??? the draft/final/withdrawn status of the SRFI, information on how
+to subscribe to its mailing list, and important dates in its history.
+The editor will add this section.</p>
+
+<h2 id="abstract">Abstract</h2>
+<p>
+ Floating-point numbers are generally in radix 2, but are written by
+ users in radix 10. This SRFI introduces Scheme syntax for hexadecimal floating
+ point constants based off of C99's syntax.
+</p>
+
+<h2 id="rationale">Rationale</h2>
+<p>
+ Computers generally use binary floating point to store numbers, while
+ humans like decimals. To express binary floating point exactly, one can
+ use <dfn>hexadecimal floating point constants</dfn>, which are written
+ in base 16 instead of base 10. They represent binary floating point
+ numbers of any mantissa and exponent size precisely.
+</p>
+
+<p>
+  Prior art: MIT-Scheme supports a version of syntax. C99 introduced
+  a hexadecimal floating point syntax that was then adopted in IEEE
+  754-2008.
+</p>
+
+<h2 id="specification">Specification</h2>
+<p>Non-normative text is in small text.</p>
+
+<h3>Syntax</h3>
+<p>
+  The following is written in Scheme's BNF, extended with the following:
+  ⟨thing⟩<sup>?</sup> means zero or one of ⟨thing⟩.
+</p>
+<p>The formal syntax of Scheme is modified to have the following new
+productions:</p>
+
+<dl class="productionset">
+<dt>⟨ureal <var>R</var>⟩</dt>
+<dd> ::= ⟨hex float body <var>R</var>⟩ ⟨hex float suffix⟩</dd>
+<dt>⟨hex float body 16⟩</dt>
+<dd> ::= ⟨uinteger 16⟩</dd>
+<dd> | <code>.</code> ⟨digit 16⟩<sup>+</sup></dd>
+<dd> | ⟨digit 16⟩<sup>+</sup> <code>.</code> ⟨digit 16⟩<sup>*</sup></dd>
+<dt>⟨hex float suffix⟩</dt>
+<dd> ::= <code>p</code> ⟨sign⟩<sup>?</sup> ⟨digit 10⟩<sup>+</sup> </dd>
+</dl>
+
+<p>
+  Without an exactness prefix, a hex float is read as an inexact
+  number. Like all numbers, hex floats can be read as exact numbers
+  by prefixing it with <code>#e</code>.
+</p>
+
+<p><small>
+  The exponential separator is <code>p</code> because it is ambiguous
+  if <code>e</code> would be a decimal separator or a hex digit.
+</small></p>
+
+<p>
+ A hexadecimal floating point number is interpreted such that
+</p>
+
+<p class="centered">
+ <var>x<sub>n</sub></var
+><var>x<sub>n&minus;1</sub></var
+>…<var>x<sub>0</sub></var
+>.<var>x<sub>&minus;1</sub></var
+><var>x<sub>&minus;2</sub></var
+>…<var>x<sub>&minus;m</sub></var
+>p<var>d</var>
+</p>
+
+<p>
+ where each <var>x</var> is a hexadecimal digit and <var>d</var> is a
+ base 10 number, is equal to
+</p>
+
+<p class="centered">
+(<var>X<sub>n</sub></var>×16<sup><var>n</var></sup>
++ <var>X<sub>n&minus;1</sub></var>×16<sup><var>n</var>&minus;1</sup>
++ …
++ <var>X<sub>0</sub></var>
++ <var>X<sub>&minus;1</sub></var>×16<sup>&minus;1</sup>
++ <var>X<sub>&minus;2</sub></var>×16<sup>&minus;2</sup>
++ …
++ <var>X<sub>&minus;m</sub></var>×16<sup>&minus;<var>m</var></sup>)×2<sup><var>d</var></sup>
+</p>
+
+<p>
+ where <var>X<sub>i</sub></var> is the numerical value of the digit
+ <var>x<sub>i</sub></var>.
+</p>
+
+<h4>R<sup>6</sup>RS Version</h4>
+<p>On R<sup>6</sup>RS systems, the above grammar is modified to be:</p>
+<dl class="productionset">
+<dt>⟨ureal R⟩</dt>
+<dd>::= ⟨hex float body R⟩ ⟨hex float suffix⟩ ⟨mantissa width⟩</dd>
+<dt>⟨hex float suffix⟩</dt>
+<dd> ::= ⟨hex exponent marker⟩ ⟨exponent marker⟩<sup>?</sup> ⟨sign⟩<sup>?</sup> ⟨digit 10⟩<sup>+</sup>
+</dd>
+<dt>⟨hex exponent marker⟩</dt>
+<dd> ::= <code>p</code></dd>
+<dd> | <code>P</code></dd>
+</dl>
+<p>
+  The R<sup>6</sup>RS
+  considerations for numbers with ⟨exponent marker⟩ and
+  ⟨mantissa width⟩ apply here.
+</p>
+<p><small>This grammar is a superset of the previous grammar.</small></p>
+
+<h3>Procedures</h3>
+
+<p>
+ The procedure <code>string->number</code> must understand hexadecimal
+ floats.
+</p>
+
+<h4><code>(write-hexadecimal-float x [port])</code></h4>
+<p>
+ Write an inexact real as a floating point number. If the number is
+ represented by an IEEE 754 binary floating point number, then the
+ number must be represented in a canonical form. If the number is a
+ real, then:
+</p>
+<ul>
+ <li>For a normal number, the integer part is 1.</li>
+ <li>For a subnormal number, the integer part is 0.</li>
+</ul>
+<p>
+ If the number is complex, then each component must be printed with the
+ above rules.
+</p>
+
+<h2 id="examples">Examples</h2>
+<p>This section is non-normative.</p>
+<table class="centered">
+  <tr>
+   <th>Expression</th>
+   <th>Number</th>
+  </tr>
+  <tr>
+   <td><code>#x9p9</code></td>
+   <td>9×2<sup>9</sup> = 4608</td>
+  </tr>
+  <tr>
+   <td><code>#x1.2p3</code></td>
+   <td>(1 + 2×16<sup>&minus;1</sup>)×2<sup>3</sup> = 9</td>
+  </tr>
+  <tr>
+   <td><code>#xFE.FFp1</code></td>
+   <td>(15×16<sup>1</sup> + 14 + 15×16<sup>&minus;1</sup> + 15×16<sup>&minus;2</sup>)×2<sup>1</sup>
+= <sup>1044465</sup>/<sub>2048</sub> ≈ 509.992…</td>
+  </tr>
+  <tr>
+   <td><code>#x-0.Ap-2</code></td>
+   <td>(10×16<sup>&minus;1</sup>)×2<sup>&minus;2</sup> = &minus;<sup>5</sup>/<sub>32</sub> = &minus;.15625</td>
+  </tr>
+  <tr>
+   <td><code>#x1.2p3+10p1i</code></td>
+   <td>9+256i</td>
+  </tr>
+</table>
+
+<h2 id="implementation">Implementation</h2>
+<p>
+  A portable implementation is impossible, as it depends on both modifying
+  the reader and knowing the specific representation of inexact reals.
+</p>
+<p>
+  An implementation-specific version will be written.
+</p>
+
+<h2 id="acknowledgements">Acknowledgements</h2>
+<p>Taylor Campbell suggested it to me on <code>#scheme</code>.</p>
+
+<h2 id="copyright">Copyright</h2>
+<p>&copy; 2026 Peter McGoron.</p>
+
+<p>
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:</p>
+
+<p>
+  The above copyright notice and this permission notice (including the
+  next paragraph) shall be included in all copies or substantial
+  portions of the Software.</p>
+
+<p>
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.</p>
+
+  <hr>
+  <address>Editor: <a href="mailto:srfi-editors+at+srfi+dot+schemers+dot+org">Arthur A. Gleckler</a></address></body></html>
