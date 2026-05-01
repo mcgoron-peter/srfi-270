@@ -6,82 +6,75 @@ SPDX-License-Identifier: MIT
 -->
   <head>
     <meta charset="utf-8" />
-    <title>SRFI ###: Hexadecimal Floating-Point Constants</title>
+    <title>SRFI 270: Hexadecimal Floating-Point Constants</title>
     <link href="/favicon.png" rel="icon" sizes="192x192" type="image/png" />
     <style>
-            @media (prefers-color-scheme: light) {
-              :root {
-                --background-color: white;
-                --link-color: blue;
-                --text-color: black;
-                --visited-link-color: purple;
-              }
-              code {
-                  background-color: #dedede;
-              }
-            }
-
-            @media (prefers-color-scheme: dark) {
-              :root {
-                --background-color: #161616;
-                --link-color: SkyBlue;
-                --text-color: #e0e0e0;
-                --visited-link-color: Orchid;
-              }
-              code {
-                background-color: #484848;
-              }
-            }
-            a {
-              color: var(--link-color);
-            }
-            a:visited {
-              color: var(--visited-link-color);
-            }
-            body {
-              background-color: var(--background-color);
-              color: var(--text-color);
-            }
-            pre code {
-                background-color: transparent;
-            }
-            pre {
-                font-size: 12pt;
-            }
-            .centered {
-             display: flex;
-             justify-content: center;
-
-            }
-            td {
-              text-align: center;
-              padding-right: 12px;
-              padding-left: 12px;
-            }
+@media (prefers-color-scheme: light) {
+  :root {
+    --background-color: white;
+    --link-color: blue;
+    --text-color: black;
+    --visited-link-color: purple;
+  }
+  code {
+    background-color: #dedede;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #161616;
+    --link-color: SkyBlue;
+    --text-color: #e0e0e0;
+    --visited-link-color: Orchid;
+  }
+  code {
+    background-color: #484848;
+  }
+}
+a {
+  color: var(--link-color);
+}
+a:visited {
+  color: var(--visited-link-color);
+}
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+pre code {
+  background-color: transparent;
+}
+pre {
+  font-size: 12pt;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+}
+td {
+  text-align: center;
+  padding-right: 12px;
+  padding-left: 12px;
+}
 .productionset {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 4px 12px;
-
 }
-
 .productionset dt {
   grid-column: 1;
 }
-
 .productionset dd {
   grid-column: 2;
   margin: 0;
 }
-
-
     </style>
     <link rel="stylesheet" href="https://srfi.schemers.org/srfi.css" type="text/css" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   <body>
     <h1><a href="https://srfi.schemers.org/"
 ><img class="srfi-logo" src="https://srfi.schemers.org/srfi-logo.svg" alt="SRFI surfboard logo"
-/></a>###: Hexadecimal Floating-Point Constants</h1>
+/></a>270: Hexadecimal Floating-Point Constants</h1>
 
 <p>by Peter McGoron</p>
 
@@ -97,7 +90,7 @@ The editor will add this section.</p>
 <p>
  Floating-point numbers are generally in radix 2, but are written by
  users in radix 10. This SRFI introduces Scheme syntax for hexadecimal floating
- point constants based off of C99's syntax.
+ point constants based on C99's syntax.
 </p>
 
 <h2 id="rationale">Rationale</h2>
@@ -110,7 +103,7 @@ The editor will add this section.</p>
 </p>
 
 <p>
-  Prior art: MIT-Scheme supports a version of syntax. C99 introduced
+  Prior art: MIT Scheme supports a version of this syntax. C99 introduced
   a hexadecimal floating point syntax that was then adopted in IEEE
   754-2008.
 </p>
@@ -140,12 +133,12 @@ productions:</p>
 <p>
   Without an exactness prefix, a hex float is read as an inexact
   number. Like all numbers, hex floats can be read as exact numbers
-  by prefixing it with <code>#e</code>.
+  by prefixing them with <code>#e</code>.
 </p>
 
 <p><small>
   The exponential separator is <code>p</code> because it is ambiguous
-  if <code>e</code> would be a decimal separator or a hex digit.
+  whether <code>e</code> would be a decimal separator or a hex digit.
 </small></p>
 
 <p>
