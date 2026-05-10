@@ -1,3 +1,5 @@
+;;;; SPDX-FileCopyrightText: 2026 Peter McGoron
+;;;; SPDX-License-Identifier: MIT
 (library (srfi :270)
   (export write-hexadecimal-float)
   (import (rnrs))
