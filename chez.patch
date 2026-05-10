@@ -1,0 +1,75 @@
+diff --git a/s/strnum.ss b/s/strnum.ss
+index 804a01f..f452593 100644
+--- a/s/strnum.ss
++++ b/s/strnum.ss
+@@ -379,6 +379,7 @@ an exception.
+   [#\. (let ([!r6rs (or !r6rs (not (fx= r 10)))]) (float1 r ex ms s n (fx+ i 1) 0))]
+   [#\# (let ([!r6rs #t]) (numhash r ex ms s (* n r)))]
+   [(#\e #\s #\f #\d #\l) (let ([!r6rs (or !r6rs (not (fx= r 10)))]) (exp0 r ex ms s n))]
++  [#\p (let ([!r6rs #t]) (binexp0 r ex ms s n))]
+   [else (complex0 r ex ms (make-part (eq? ex 'i) s n))])
+ 
+ (mknum-state num3 (r ex ms s)            ; saw "i" after sign
+@@ -427,6 +428,7 @@ an exception.
+   [#\. (floathash r ex ms s n (fx+ i 1) 0)]
+   [#\# (numhash r ex ms s (* n r))]
+   [(#\e #\s #\f #\d #\l) (exp0 r ex ms s n)]
++  [#\p (let ([!r6rs #t]) (binexp0 r ex ms s n))]
+   [else (complex0 r ex ms (make-part (not (eq? ex 'e)) s n))])
+ 
+ ; can't embed sign in m since we might end up in exp0 and then on
+@@ -446,12 +448,14 @@ an exception.
+   [(digit r) (rat1 r ex d-ex ms s m (+ (* n r) d))]
+   [#\# (let ([!r6rs #t]) (rathash r ex ms s m (* n r)))]
+   [(#\e #\s #\f #\d #\l) (let ([!r6rs #t]) (exp0 r ex ms s (mkrat #f #f plus 'nan 'inf m (make-part #f plus n))))]
++  [#\p (let ([!r6rs #t]) (binexp0 r ex ms s (mkrat #f #f plus 'nan 'inf m (make-part #f plus n))))]
+   [else (complex0 r ex ms (mkrat #f (eq? d-ex 'i) s 'norep 'norep m (make-part #f plus n)))])
+ 
+ (mknum-state rathash (r ex ms s m n)    ; saw # after denominator
+   (finish-number ms ex x1 (mkrat #f (not (eq? ex 'e)) s 'norep 'norep m (make-part #f plus n)))
+   [#\# (rathash r ex ms s m (* n r))]
+   [(#\e #\s #\f #\d #\l) (exp0 r ex ms s (mkrat #f #f plus 'nan 'inf m (make-part #f plus n)))]
++  [#\p (let ([!r6rs #t]) (binexp0 r ex ms s (mkrat #f #f plus 'nan 'inf m (make-part #f plus n))))]
+   [else (complex0 r ex ms (mkrat #f (not (eq? ex 'e)) s 'norep 'norep m (make-part #f plus n)))])
+ 
+ (mknum-state float0 (r ex ms s)          ; saw leading decimal point
+@@ -464,14 +468,39 @@ an exception.
+   [#\| (mwidth0 r ex ms (lambda (t) (make-part (not (eq? ex 'e)) s (t (+ m (* n (expt r (- j i))))))))]
+   [#\# (let ([!r6rs #t]) (floathash r ex ms s m j (* n r)))]
+   [(#\e #\s #\f #\d #\l) (exp0 r ex ms s (+ m (* n (expt r (- j i)))))]
++  [#\p (let ([!r6rs #t]) (binexp0 r ex ms s (+ m (* n (expt r (- j i))))))]
+   [else (complex0 r ex ms (make-part (not (eq? ex 'e)) s (+ m (* n (expt r (- j i))))))])
+ 
+ (mknum-state floathash (r ex ms s m j n) ; seen hash(es), now in fraction
+   (finish-number ms ex x1 (make-part (not (eq? ex 'e)) s (+ m (* n (expt r (- j i))))))
+   [#\# (floathash r ex ms s m j (* n r))]
+   [(#\e #\s #\f #\d #\l) (exp0 r ex ms s (+ m (* n (expt r (- j i)))))]
++  [#\p (binexp0 r ex ms s (+ m (* n (expt r (- j i)))))]
+   [else (complex0 r ex ms (make-part (not (eq? ex 'e)) s (+ m (* n (expt r (- j i))))))])
+ 
++(mknum-state binexp0 (r ex ms s wi)       ; saw binary exponent flag
++  #f
++  [(digit r) (binexp2 r ex ms s wi plus d)]
++  [(#\e #\s #\f #\d #\l) (binexp-after-explicit-exponent r ex ms s wi)]
++  [#\+ (binexp1 r ex ms s wi plus)]
++  [#\- (binexp1 r ex ms s wi minus)])
++
++(mknum-state binexp-after-explicit-exponent (r ex ms s wi)
++  #f
++  [(digit r) (binexp2 r ex ms s wi plus d)]
++  [#\+ (binexp1 r ex ms s wi plus)]
++  [#\- (binexp1 r ex ms s wi minus)])
++
++(mknum-state binexp1 (r ex ms sm wi s)   ; Saw binary exponent sign
++  #f
++  [(digit r) (binexp2 r ex ms sm wi s d)])
++
++(mknum-state binexp2 (r ex ms sm wi s e) ; saw binary exponent digit(s)
++  (finish-number ms ex x1 (make-part/exponent (not (eq? ex 'e)) sm noround wi 2 (s e)))
++  [(digit 10) (binexp2 r ex ms sm wi s (+ (* e 10) d))]
++  [#\| (mwidth0 r ex ms (lambda (t) (make-part/exponent (not (eq? ex 'e)) sm t wi 2 (s e))))]
++  [else (complex0 r ex ms (make-part/exponent (not (eq? ex 'e)) sm noround wi 2 (s e)))])
++
+ (mknum-state exp0 (r ex ms s wi)          ; saw exponent flag
+   #f
+   [(digit r) (exp2 r ex ms s wi plus d)]
