@@ -1,3 +1,7 @@
+; SPDX-FileCopyrightText: 2026 Peter McGoron
+;
+; SPDX-License-Identifier: MIT
+
 (import (srfi 143) (srfi 144))
 
 ; decode-flonum, if called with a finite non-nan flonum, returns 3 values:

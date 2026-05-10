@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Peter McGoron
+#
+# SPDX-License-Identifier: Apache-2.0
+
 diff --git a/s/strnum.ss b/s/strnum.ss
 index 804a01f..f452593 100644
 --- a/s/strnum.ss
