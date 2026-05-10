@@ -203,7 +203,7 @@ productions:</p>
  floats.
 </p>
 
-<h4><code>(write-hexadecimal-float x [port])</code></h4>
+<h4><code>(write-hexadecimal-float <var>z</var> [<var>port</var>])</code></h4>
 <p>
  Write an inexact real as a floating point number. If the number is
  represented by an IEEE 754 binary floating point number, then the
@@ -220,10 +220,21 @@ productions:</p>
  If the number is complex, then each component must be printed with the
  above rules.
 </p>
-<p><small>
+<p>
+ If an implementation implements IEEE 754 binary floating point numbers,
+ then such a number written with this procedure <strong>MUST</strong> be
+ read back as the same number according to <code>eqv?</code>.
+</p>
+<p>
+ If <var>z</var> cannot be represented as a finite hexadecimal float,
+ then it is represented to an implementation defined precision. The
+ implementation <strong>SHOULD</strong> write the closest flonum to
+ <var>z</var>.
+</p>
+<p>
   An implementation should output the minimum length string that
   satisfies these requirements.
-</small></p>
+</p>
 
 <h2 id="examples">Examples</h2>
 <p>This section is non-normative.</p>
