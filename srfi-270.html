@@ -207,17 +207,23 @@ productions:</p>
 <p>
  Write an inexact real as a floating point number. If the number is
  represented by an IEEE 754 binary floating point number, then the
- number must be represented in a canonical form. If the number is a
+ number must be represented in a certain form. If the number is a
  real, then:
 </p>
 <ul>
  <li>For a normal number, the integer part is 1.</li>
- <li>For a subnormal number, the integer part is 0.</li>
+ <li>For a subnormal number (or zero), the integer part is 0.</li>
+ <li>If the number is NaN or infinity, print it as it would normally be
+     printed in Scheme syntax.</li>
 </ul>
 <p>
  If the number is complex, then each component must be printed with the
  above rules.
 </p>
+<p><small>
+  An implementation should output the minimum length string that
+  satisfies these requirements.
+</small></p>
 
 <h2 id="examples">Examples</h2>
 <p>This section is non-normative.</p>
@@ -237,15 +243,15 @@ productions:</p>
   <tr>
    <td><code>#xFE.FFp1</code></td>
    <td>(15×16<sup>1</sup> + 14 + 15×16<sup>&minus;1</sup> + 15×16<sup>&minus;2</sup>)×2<sup>1</sup>
-= <sup>1044465</sup>/<sub>2048</sub> ≈ 509.992…</td>
+= <sup>65279</sup>/<sub>128</sub> ≈ 509.992…</td>
   </tr>
   <tr>
    <td><code>#x-0.Ap-2</code></td>
    <td>(10×16<sup>&minus;1</sup>)×2<sup>&minus;2</sup> = &minus;<sup>5</sup>/<sub>32</sub> = &minus;.15625</td>
   </tr>
   <tr>
-   <td><code>#x1.2p3+10p1i</code></td>
-   <td>9+256i</td>
+   <td><code>#x1.9p1+10p1i</code></td>
+   <td>(1 + 9×16<sup>&minus;1</sup>)×2<sup>1</sup> + (1×16 + 0)×2<sup>1</sup>i</td>
   </tr>
 </table>
 
@@ -255,7 +261,16 @@ productions:</p>
   the reader and knowing the specific representation of inexact reals.
 </p>
 <p>
-  An implementation-specific version will be written.
+  An implementation written for Chez 10.4.0 is in the
+  <a href="https://github.com/scheme-requests-for-implementation/srfi-270">SRFI repository</a>.
+  The implementation includes a patch to the reader and test suite that
+  automatically generates hex floats to test against.
+</p>
+<p>
+  The implementation of <code>write-hexadecimal-float</code> depends on a
+  procedure <code>decode-float</code>. Such a procedure can be implemented
+  using <a href="https://srfi.schemers.org/srfi-144/">SRFI 144</a> flonums,
+  using a procedure in the repository contributed by Sergei Egorov.
 </p>
 
 <h2 id="acknowledgements">Acknowledgements</h2>
