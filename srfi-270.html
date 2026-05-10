@@ -196,6 +196,16 @@ productions:</p>
 </p>
 <p><small>This grammar is a superset of the previous grammar.</small></p>
 
+<h4>Possible Extensions</h4>
+<em>This section is non-normative.</em>
+<ul>
+<li>Non-R<sup>6</sup>RS implementations may adapt the exponent markers
+    (<code>s</code>, <code>f</code>, <code>d</code>, <code>l</code>)
+    in the same way as the R<sup>6</sup>RS.</li>
+<li>Binary, octal, and decimal numbers could read the <code>p</code>
+    as a power-of-two exponent separator.</li>
+</ul>
+
 <h3>Procedures</h3>
 
 <p>
@@ -230,6 +240,9 @@ productions:</p>
  then it is represented to an implementation defined precision. The
  implementation <strong>SHOULD</strong> write the closest flonum to
  <var>z</var>.
+</p>
+<p>
+ No prefix (such as <code>#x</code> or <code>#e</code>) is written.
 </p>
 <p>
   An implementation should output the minimum length string that
