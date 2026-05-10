@@ -82,7 +82,7 @@
                    (- i 1))))))))))
 
 (do ((i 0 (+ i 1)))
-    ((= i 10000))
+    ((= i 100000))
   (let-values (((str num) (generate-pair)))
     (test str num)
     (let ((str2 (call-with-string-output-port

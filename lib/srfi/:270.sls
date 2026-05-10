@@ -58,7 +58,7 @@
           (let-values (((m e sign) (decode-float n)))
             (when (negative? sign)
               (display "-" port))
-            (if (<= e -1023)
+            (if (= e -1023)
                 (display "0." port)
                 (display "1." port))
             (do ((l '() 
@@ -71,7 +71,9 @@
                 ((= i 52/4)
                  (display (list->string l) port)))
             (display "p" port)
-            (display e port)))
+            (if (= e -1023)
+                (display -1022 port)
+                (display e port))))
          ((exact? n) (write-hexadecimal-float (inexact n) port))
          (else (assertion-violation 'write-hexadecimal-float
                                     "not a number"
