@@ -115,7 +115,7 @@ td {
 <p>
  This format is based off of C99's hexadecimal floating point constant
  syntax.
- MIT Scheme implements a subset of this syntax. C, Julia, and Zig
+ MIT Scheme implements a subset of this syntax. C, Julia, Java, and Zig
  allow one to write floating point numbers using IEEE 754-2008's syntax
  (which was derived from C99).
 </p>
@@ -215,7 +215,8 @@ productions:</p>
     in the same way as the R<sup>6</sup>RS.</li>
 <li>Binary, octal, and decimal numbers could read the <code>p</code>
     as a power-of-two exponent separator.</li>
-<li>Hex floats without <code>p</code>.</li>
+<li>Hex floats without <code>p</code> are treated as if <code>p0</code>
+    were appended to them.</li>
 </ul>
 
 <h3>Procedures</h3>
@@ -262,7 +263,7 @@ productions:</p>
 </p>
 
 <h2 id="examples">Examples</h2>
-<p>This section is non-normative.</p>
+<em>This section is non-normative.</em>
 <table class="centered">
   <tr>
    <th>Expression</th>
@@ -287,7 +288,9 @@ productions:</p>
   </tr>
   <tr>
    <td><code>#x1.9p1+10p1i</code></td>
-   <td>(1 + 9×16<sup>&minus;1</sup>)×2<sup>1</sup> + (1×16 + 0)×2<sup>1</sup>i</td>
+   <td>(1 + 9×16<sup>&minus;1</sup>)×2<sup>1</sup> + (1×16 + 0)×2<sup>1</sup>i
+       = <sup>25</sup>/<sub>8</sub> + 32i
+   </td>
   </tr>
 </table>
 
