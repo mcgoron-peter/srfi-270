@@ -129,11 +129,11 @@ td {
 </p>
 
 <p>
-  This SRFI proposes hexadecimal floating point constants in a similar
-  way to C’s syntax. When a hexadecimal number is input using
+  This SRFI proposes a syntax for hexadecimal floating point constants similar
+  to C’s syntax. When a hexadecimal number is input using
   <code>#x</code>, numbers after a decimal point will be read as fractional
-  numbers in base 16. The character <code>p</code> is an exponent, which
-  raises the number to a specified power of 2. Unlike C’s syntax, the
+  numbers in base 16. The character <code>p</code> is an exponent marker, which
+  raises the number to a specified power of 2. Unlike in C’s syntax, the
   <code>p</code> is optional.
 </p>
 
@@ -147,8 +147,10 @@ td {
   The following is written in Scheme's BNF, extended with the following:
   ⟨thing⟩<sup>?</sup> means zero or one of ⟨thing⟩.
 </p>
-<p>The formal syntax of Scheme is modified to have the following new
-productions:</p>
+<p>
+   The formal syntax of Scheme is modified to have the following
+   productions:
+</p>
 
 <dl class="productionset">
 <dt>⟨ureal <var>R</var>⟩</dt>
@@ -170,7 +172,7 @@ productions:</p>
 
 <p>
   Note that hexadecimal floats in code will need a <code>#x</code> in front of
-  them, because in the formal grammar, <code>#x</code> is required to produce
+  them, because, in the formal grammar, <code>#x</code> is required to produce
   ⟨ureal 16⟩ and hence ⟨hex float body 16⟩. It is not required in
   places like <code>string-&gt;number</code>, where the radix is
   supplied explicitly.
@@ -178,7 +180,7 @@ productions:</p>
 
 <p><small>
   The exponent marker is <code>p</code> because it is ambiguous
-  whether <code>e</code> would be a decimal separator or a hex digit.
+  whether <code>e</code> would be an exponent marker or a hex digit.
 </small></p>
 
 <p>
@@ -278,8 +280,8 @@ productions:</p>
      printed in Scheme syntax.</li>
 </ul>
 <p>
- If the number is complex, then each component must be printed with the
- above rules.
+ If the number is complex, then each component <strong>must</strong>
+ be printed with the above rules.
 </p>
 <p>
  If an implementation supports IEEE 754 binary floating point numbers,
@@ -306,8 +308,9 @@ productions:</p>
 <h2 id="examples">Examples</h2>
 <p><em>This section is non-normative.</em></p>
 <p>
-  This section assumes that the suffix <code>f</code> represents a
-  binary32 number, and <code>d</code> represents a binary64 number.
+  This section assumes that the exponent marker <code>f</code> indiciates
+  that a number is a binary32 number, and that the exponent marker
+  <code>d</code> indiciates that a number is a binary64 number.
 </p>
 
 <table class="centered">
